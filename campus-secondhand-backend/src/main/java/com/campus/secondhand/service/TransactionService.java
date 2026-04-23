@@ -28,9 +28,10 @@ public class TransactionService {
     public static final byte STATUS_COMPLETED = 2;   // 已完成
     public static final byte STATUS_CANCELLED = 3;   // 已取消
 
-    // Product status constants
-    public static final byte PRODUCT_STATUS_ON_SALE = 0;  // 在售
-    public static final byte PRODUCT_STATUS_SOLD = 1;     // 已售
+    // Product status constants (与ProductMapper.xml一致)
+    public static final byte PRODUCT_STATUS_OFF_SALE = 0;  // 下架
+    public static final byte PRODUCT_STATUS_ON_SALE = 1;   // 在售
+    public static final byte PRODUCT_STATUS_SOLD = 2;      // 已售
 
     private final TransactionMapper transactionMapper;
     private final ProductMapper productMapper;

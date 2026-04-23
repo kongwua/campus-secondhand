@@ -117,7 +117,8 @@
               :alt="product.title"
               loading="lazy"
             />
-            <div v-if="product.status === 1" class="sold-badge">已售</div>
+            <div v-if="product.status === 0" class="sold-badge offline">已下架</div>
+            <div v-if="product.status === 2" class="sold-badge sold">已售</div>
           </div>
           
           <!-- Product Info -->
@@ -722,6 +723,14 @@ onMounted(() => {
   border-radius: var(--radius-sm);
   font-family: var(--font-display);
   font-size: 12px;
+}
+
+.sold-badge.offline {
+  background: var(--text-muted);
+}
+
+.sold-badge.sold {
+  background: var(--color-accent-pink);
 }
 
 .card-body {

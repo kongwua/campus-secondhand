@@ -12,7 +12,7 @@ export const useAuthStore = defineStore('auth', {
   actions: {
     async loginAction(username: string, password: string) {
       const res: any = await login({ username, password })
-      if (res.code === 200) {
+      if (res.code === 200 && res.data) {
         this.token = res.data.token
         this.user = res.data.user
         this.isLoggedIn = true

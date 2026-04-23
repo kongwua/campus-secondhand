@@ -41,7 +41,7 @@
               <div class="field-group">
                 <label class="field-label">分类</label>
                 <select v-model="form.categoryId" class="field-select" required>
-                  <option value="">选择分类</option>
+                  <option :value="undefined">选择分类</option>
                   <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
                 </select>
               </div>
@@ -112,10 +112,12 @@ const handleFileChange = async (e: Event) => {
   if (!file) return
   try {
     const res: any = await getUploadUrl(file.name)
-    if (res.code === 200) {
-      await fetch(res.data.uploadUrl, { method: 'PUT', body: file })
-      imageList.value.push(res.data.objectKey)
-      form.value.images.push(res.data.objectKey)
+    const data = res.data || res
+    if (data.uploadUrl) {
+      await fetch(data.uploadUrl, { method: 'PUT', body: file })
+      imageList.value.push(data.objectKey)
+      form.value.images.push(data.objectKey)
+      ElMessage.success('上传成功')
     }
   } catch (e) { ElMessage.error('上传失败') }
   target.value = ''
@@ -127,9 +129,20 @@ const handleSubmit = async () => {
   if (!isFormValid.value) { ElMessage.warning('请填写完整信息'); return }
   loading.value = true
   try {
-    const res: any = await createProduct({ ...form.value, images: JSON.stringify(form.value.images) })
-    if (res.code === 200) { ElMessage.success('发布成功！'); router.push(`/product/${res.data.id}`) }
-    else { ElMessage.error(res.message || '发布失败') }
+    const res: any = await createProduct({ 
+      ...form.value, 
+      images: form.value.images.length > 0 ? form.value.images : null 
+    })
+    const data = res.data || res
+    if (data.id) { 
+      ElMessage.success('发布成功！')
+      router.push(`/product/${data.id}`)
+    } else if (res.code === 200) {
+      ElMessage.success('发布成功！')
+      router.push('/')
+    } else { 
+      ElMessage.error(res.message || '发布失败') 
+    }
   } catch (e: any) { ElMessage.error(e.message || '发布失败') }
   finally { loading.value = false }
 }
@@ -137,8 +150,10 @@ const handleSubmit = async () => {
 const goBack = () => router.push('/')
 
 onMounted(async () => { 
-  const res: any = await getCategories()
-  categories.value = res.data || []
+  try {
+    const res: any = await getCategories()
+    categories.value = Array.isArray(res) ? res : (res.data || [])
+  } catch (e) { console.error('获取分类失败', e) }
 })
 </script>
 

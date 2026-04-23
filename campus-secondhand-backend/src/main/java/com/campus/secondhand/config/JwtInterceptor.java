@@ -18,6 +18,10 @@ public class JwtInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+        if (isPublicGetRequest(request)) {
+            return true;
+        }
+        
         String token = extractToken(request);
 
         if (!StringUtils.hasText(token)) {
@@ -32,6 +36,14 @@ public class JwtInterceptor implements HandlerInterceptor {
         UserContext.setCurrentUserId(userId);
 
         return true;
+    }
+
+    private boolean isPublicGetRequest(HttpServletRequest request) {
+        if (!"GET".equals(request.getMethod())) {
+            return false;
+        }
+        String path = request.getRequestURI();
+        return path.startsWith("/api/products") || path.equals("/api/products/categories");
     }
 
     @Override

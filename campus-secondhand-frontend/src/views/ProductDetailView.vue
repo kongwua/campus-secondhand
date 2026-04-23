@@ -14,8 +14,15 @@
            <div class="frame-corner bot-right"></div>
             
             <div class="image-carousel">
+              <img 
+                v-if="!product.images || product.images.length === 0"
+                :src="'/placeholder.png'"
+                :alt="product.title"
+                class="default-image"
+              />
               <div 
                 v-for="(img, idx) in product.images" 
+                v-else
                 :key="idx"
                 class="carousel-slide"
                 :class="{ active: currentImage === idx }"
@@ -88,7 +95,7 @@
               <span class="btn-icon">💬</span>
               <span class="btn-text">联系卖家</span>
             </button>
-            <button class="buy-btn" @click="createTransaction" v-if="isLoggedIn && product.status === 0">
+            <button class="buy-btn" @click="createTransaction" v-if="isLoggedIn && product.status === 1">
               <span class="btn-icon">🛒</span>
               <span class="btn-text">发起交易</span>
             </button>
@@ -124,12 +131,17 @@ const isLoggedIn = computed(() => authStore.isLoggedIn)
 
 const fetchDetail = async () => {
   const id = Number(route.params.id)
-  const res: any = await getProductById(id)
-  if (res.code === 200) {
-    product.value = res.data.product
-    seller.value = res.data.seller
-    categoryName.value = res.data.categoryName || '未分类'
-  } else {
+  try {
+    const res: any = await getProductById(id)
+    if (res && res.id) {
+      product.value = res
+      seller.value = { id: res.userId, nickname: res.username, creditScore: 100 }
+      categoryName.value = res.categoryName || '未分类'
+    } else {
+      ElMessage.error('商品不存在')
+      router.push('/')
+    }
+  } catch (e) {
     ElMessage.error('商品不存在')
     router.push('/')
   }
@@ -184,6 +196,7 @@ onMounted(fetchDetail)
 .carousel-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 0.5s ease; }
 .carousel-slide.active { opacity: 1; }
 .carousel-slide img { width: 100%; height: 100%; object-fit: cover; }
+.default-image { width: 100%; height: 100%; object-fit: contain; background: var(--bg-card-alt); }
 .carousel-nav { display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: 12px; }
 .nav-btn { background: var(--color-primary); color: white; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 18px; }
 .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
