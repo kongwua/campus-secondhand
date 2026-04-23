@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gdut.secondhand.mapper.TransactionMapper">
+
+    <resultMap id="BaseResultMap" type="com.gdut.secondhand.entity.Transaction">
+        <id column="id" property="id"/>
+        <result column="product_id" property="productId"/>
+        <result column="seller_id" property="sellerId"/>
+        <result column="buyer_id" property="buyerId"/>
+        <result column="price" property="price"/>
+        <result column="status" property="status"/>
+        <result column="meeting_time" property="meetingTime"/>
+        <result column="meeting_location" property="meetingLocation"/>
+        <result column="create_time" property="createTime"/>
+        <result column="complete_time" property="completeTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, product_id, seller_id, buyer_id, price, status, meeting_time, meeting_location, create_time, complete_time
+    </sql>
+
+    <insert id="insert" parameterType="com.gdut.secondhand.entity.Transaction" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO transaction (product_id, seller_id, buyer_id, price, status, meeting_time, meeting_location)
+        VALUES (#{productId}, #{sellerId}, #{buyerId}, #{price}, #{status}, #{meetingTime}, #{meetingLocation})
+    </insert>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM transaction
+        WHERE id = #{id}
+    </select>
+
+    <select id="selectByUserId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM transaction
+        WHERE 
+        <if test="role == 'buyer'">
+            buyer_id = #{userId}
+        </if>
+        <if test="role == 'seller'">
+            seller_id = #{userId}
+        </if>
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="selectByProductId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM transaction
+        WHERE product_id = #{productId}
+        ORDER BY create_time DESC
+    </select>
+
+    <update id="updateStatus">
+        UPDATE transaction
+        SET status = #{status}
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateComplete">
+        UPDATE transaction
+        SET status = #{status}, complete_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <select id="selectByProductIdAndStatus" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM transaction
+        WHERE product_id = #{productId} AND status = #{status}
+        LIMIT 1
+    </select>
+
+    <select id="countByProductIdAndStatusIn" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM transaction
+        WHERE product_id = #{productId}
+        AND status IN
+        <foreach collection="statuses" item="status" open="(" separator="," close=")">
+            #{status}
+        </foreach>
+    </select>
+
+</mapper>

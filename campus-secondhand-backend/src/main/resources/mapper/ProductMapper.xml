@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gdut.secondhand.mapper.ProductMapper">
+
+    <resultMap id="BaseResultMap" type="com.gdut.secondhand.entity.Product">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="title" property="title"/>
+        <result column="description" property="description"/>
+        <result column="category_id" property="categoryId"/>
+        <result column="price" property="price"/>
+        <result column="original_price" property="originalPrice"/>
+        <result column="images" property="images"/>
+        <result column="location" property="location"/>
+        <result column="status" property="status"/>
+        <result column="view_count" property="viewCount"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, user_id, title, description, category_id, price, original_price, images, location, status, view_count, create_time, update_time
+    </sql>
+
+    <insert id="insert" parameterType="com.gdut.secondhand.entity.Product" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO product (user_id, title, description, category_id, price, original_price, images, location, status, view_count)
+        VALUES (#{userId}, #{title}, #{description}, #{categoryId}, #{price}, #{originalPrice}, #{images}, #{location}, #{status}, #{viewCount})
+    </insert>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM product
+        WHERE id = #{id}
+    </select>
+
+    <select id="selectPage" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM product
+        <where>
+            status = 1
+            <if test="keyword != null and keyword != ''">
+                AND (title LIKE CONCAT('%', #{keyword}, '%') OR description LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+            <if test="categoryId != null">
+                AND category_id = #{categoryId}
+            </if>
+            <if test="minPrice != null">
+                AND price >= #{minPrice}
+            </if>
+            <if test="maxPrice != null">
+                AND price &lt;= #{maxPrice}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+        LIMIT ${(pageNum - 1) * pageSize}, ${pageSize}
+    </select>
+
+    <select id="countPage" resultType="java.lang.Long">
+        SELECT COUNT(*)
+        FROM product
+        <where>
+            status = 1
+            <if test="keyword != null and keyword != ''">
+                AND (title LIKE CONCAT('%', #{keyword}, '%') OR description LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+            <if test="categoryId != null">
+                AND category_id = #{categoryId}
+            </if>
+            <if test="minPrice != null">
+                AND price >= #{minPrice}
+            </if>
+            <if test="maxPrice != null">
+                AND price &lt;= #{maxPrice}
+            </if>
+        </where>
+    </select>
+
+    <update id="update" parameterType="com.gdut.secondhand.entity.Product">
+        UPDATE product
+        <set>
+            <if test="title != null">title = #{title},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="categoryId != null">category_id = #{categoryId},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="originalPrice != null">original_price = #{originalPrice},</if>
+            <if test="images != null">images = #{images},</if>
+            <if test="location != null">location = #{location},</if>
+            <if test="status != null">status = #{status},</if>
+            update_time = NOW()
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete">
+        UPDATE product SET status = 0 WHERE id = #{id}
+    </delete>
+
+    <update id="increaseViewCount">
+        UPDATE product SET view_count = view_count + 1 WHERE id = #{id}
+    </update>
+
+</mapper>

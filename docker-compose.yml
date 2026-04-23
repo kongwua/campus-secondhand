@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: campus-secondhand-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: campus_secondhand
+      MYSQL_CHARSET: utf8mb4
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ../sql/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+      - ../sql/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ../campus-secondhand-backend
+      dockerfile: Dockerfile
+    container_name: campus-secondhand-backend
+    environment:
+      JWT_SECRET: campus-secondhand-production-secret-key-change-this
+      JWT_EXPIRATION: 604800000
+      HUAWEI_CLOUD_RDS_HOST: mysql
+      HUAWEI_CLOUD_RDS_PORT: 3306
+      HUAWEI_CLOUD_RDS_DATABASE: campus_secondhand
+      HUAWEI_CLOUD_RDS_USERNAME: root
+      HUAWEI_CLOUD_RDS_PASSWORD: root
+      HUAWEI_CLOUD_RDS_ENABLED: true
+      HUAWEI_CLOUD_OBS_ENABLED: false
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ../campus-secondhand-frontend
+      dockerfile: Dockerfile
+    container_name: campus-secondhand-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  mysql_data:

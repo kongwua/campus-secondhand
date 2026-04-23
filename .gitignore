@@ -1,0 +1,49 @@
+# ===================================
+# Campus Secondhand Trading Platform
+# Git Ignore Configuration
+# ===================================
+
+# === 敏感配置文件 (必须排除) ===
+# 华为云真实配置 - 包含 AK/SK 和数据库密码
+campus-secondhand-backend/src/main/resources/huawei-cloud.yml
+
+# === Java/Maven 构建产物 ===
+campus-secondhand-backend/target/
+**/*.class
+**/*.jar
+**/*.war
+**/*.log
+
+# === 前端构建产物和依赖 ===
+campus-secondhand-frontend/dist/
+campus-secondhand-frontend/node_modules/
+
+# === IDE 配置文件 ===
+.idea/
+.vscode/
+*.iml
+*.swp
+*.swo
+*~
+
+# === 系统缓存文件 ===
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+
+# === 日志文件 ===
+*.log
+logs/
+
+# === 临时文件 ===
+*.tmp
+*.temp
+.cache/
+
+# === 其他 ===
+# 不上传部署相关的敏感文件
+deploy/*.sh

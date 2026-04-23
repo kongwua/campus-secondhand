@@ -1,0 +1,18 @@
+server:
+  port: 8080
+
+spring:
+  config:
+    import: classpath:huawei-cloud.yml
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.gdut.secondhand.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+jwt:
+  secret: campus-secondhand-secret-key-please-change-in-production
+  expiration: 604800000
+  exclude-paths: /api/auth/**
