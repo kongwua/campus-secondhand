@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.gdut.secondhand.mapper.ProductMapper">
+<mapper namespace="com.campus.secondhand.mapper.ProductMapper">
 
-    <resultMap id="BaseResultMap" type="com.gdut.secondhand.entity.Product">
+    <resultMap id="BaseResultMap" type="com.campus.secondhand.entity.Product">
         <id column="id" property="id"/>
         <result column="user_id" property="userId"/>
         <result column="title" property="title"/>
@@ -22,7 +22,7 @@
         id, user_id, title, description, category_id, price, original_price, images, location, status, view_count, create_time, update_time
     </sql>
 
-    <insert id="insert" parameterType="com.gdut.secondhand.entity.Product" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.campus.secondhand.entity.Product" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO product (user_id, title, description, category_id, price, original_price, images, location, status, view_count)
         VALUES (#{userId}, #{title}, #{description}, #{categoryId}, #{price}, #{originalPrice}, #{images}, #{location}, #{status}, #{viewCount})
     </insert>
@@ -75,7 +75,7 @@
         </where>
     </select>
 
-    <update id="update" parameterType="com.gdut.secondhand.entity.Product">
+    <update id="update" parameterType="com.campus.secondhand.entity.Product">
         UPDATE product
         <set>
             <if test="title != null">title = #{title},</if>

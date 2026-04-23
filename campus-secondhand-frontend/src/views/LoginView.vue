@@ -68,7 +68,7 @@
       
       <!-- Footer Note -->
       <div class="card-footer">
-        <p class="footer-note">🎓 广东工业大学 · 校园二手市集</p>
+        <p class="footer-note">🎓 校园市集 · 校园二手市集</p>
       </div>
     </div>
   </div>

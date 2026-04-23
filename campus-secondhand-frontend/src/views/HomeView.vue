@@ -159,7 +159,7 @@
     
     <!-- Footer -->
     <footer class="market-footer">
-      <p class="footer-text">广东工业大学 · 校园二手市集 · 让闲置流转</p>
+      <p class="footer-text">校园市集 · 校园二手市集 · 让闲置流转</p>
     </footer>
   </div>
 </template>

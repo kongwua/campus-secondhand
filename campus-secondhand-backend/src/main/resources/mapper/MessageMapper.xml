@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.gdut.secondhand.mapper.MessageMapper">
+<mapper namespace="com.campus.secondhand.mapper.MessageMapper">
 
-    <resultMap id="BaseResultMap" type="com.gdut.secondhand.entity.Message">
+    <resultMap id="BaseResultMap" type="com.campus.secondhand.entity.Message">
         <id column="id" property="id"/>
         <result column="sender_id" property="senderId"/>
         <result column="receiver_id" property="receiverId"/>
@@ -16,7 +16,7 @@
         id, sender_id, receiver_id, product_id, content, is_read, create_time
     </sql>
 
-    <insert id="insert" parameterType="com.gdut.secondhand.entity.Message" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.campus.secondhand.entity.Message" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO message (sender_id, receiver_id, product_id, content, is_read)
         VALUES (#{senderId}, #{receiverId}, #{productId}, #{content}, #{isRead})
     </insert>

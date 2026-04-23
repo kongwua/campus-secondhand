@@ -11,7 +11,7 @@
         <relativePath/>
     </parent>
 
-    <groupId>com.gdut</groupId>
+    <groupId>com.campus</groupId>
     <artifactId>campus-secondhand</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>

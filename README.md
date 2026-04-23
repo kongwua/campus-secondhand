@@ -1,242 +1,228 @@
-# 校园二手物品交易系统
+# Campus Secondhand Trading Platform
 
-**项目名称**: Campus Secondhand Trading System  
-**作者**: 李嘉辉  
-**学号**: 3123004443  
-**课程**: 虚拟化与云计算  
-**学校**: 广东工业大学  
+A secondhand trading platform for campus students, built with Spring Boot 3 + Vue 3, deployed on cloud services.
 
 ---
 
-## 项目简介
+## Project Overview
 
-校园二手物品交易系统是一个面向广东工业大学学生的二手物品交易平台，基于华为云 ECS + RDS + OBS 服务构建，提供商品发布、搜索筛选、在线沟通、交易管理、信用评价等完整功能。
+This platform provides complete features for campus secondhand trading:
+- Product publishing with image upload
+- Search and filter products
+- User authentication (JWT)
+- Real-time messaging
+- Transaction management
+- Review system
 
 ---
 
-## 目录结构
+## Directory Structure
 
 ```
-校园二手物品交易系统/
+campus-secondhand/
 │
-├── campus-secondhand-backend/     # 后端源码 (Spring Boot 3)
+├── campus-secondhand-backend/     # Backend (Spring Boot 3)
 │   ├── src/main/java/
-│   │   └── com/gdut/secondhand/
-│   │       ├── controller/        # REST API 控制器
-│   │       ├── service/           # 业务逻辑层
+│   │   └── com/campus/secondhand/
+│   │       ├── controller/        # REST API
+│   │       ├── service/           # Business logic
 │   │       ├── mapper/            # MyBatis Mapper
-│   │       ├── entity/            # 数据实体
-│   │       ├── dto/               # 请求/响应 DTO
-│   │       ├── exception/         # 异常处理
-│   │       └── utils/             # 工具类 (JWT等)
+│   │       ├── entity/            # Data entities
+│   │       ├── dto/               # Request/Response DTOs
+│   │       ├── exception/         # Exception handling
+│   │       └── utils/             # Utilities (JWT)
 │   ├── src/main/resources/
-│   │   ├── application.yml        # 基础配置文件
-│   │   ├── huawei-cloud.yml       # 华为云服务配置（RDS + OBS）
-│   │   ├── huawei-cloud-example.yml # 华为云配置示例模板
+│   │   ├── application.yml        # Base config
+│   │   ├── huawei-cloud-example.yml # Config template
 │   │   └── mapper/*.xml           # MyBatis XML
-│   └── pom.xml                    # Maven 配置
+│   └── pom.xml                    # Maven config
 │
-├── campus-secondhand-frontend/    # 前端源码 (Vue 3)
+├── campus-secondhand-frontend/    # Frontend (Vue 3)
 │   ├── src/
-│   │   ├── views/                 # 页面视图 (9个页面)
-│   │   ├── components/            # UI 组件
-│   │   ├── api/                   # API 请求封装
-│   │   ├── router/                # Vue Router 配置
-│   │   ├── store/                 # Pinia 状态管理
-│   │   ├── styles/                # 全局样式
-│   │   └── utils/                 # 工具函数
-│   ├── index.html                 # 入口 HTML
-│   ├── vite.config.ts             # Vite 配置
-│   └── package.json               # npm 配置
+│   │   ├── views/                 # Page views
+│   │   ├── api/                   # API requests
+│   │   ├── router/                # Vue Router
+│   │   ├── store/                 # Pinia state
+│   │   └── styles/                # Global styles
+│   ├── vite.config.ts             # Vite config
+│   └── package.json               # npm config
 │
-├── sql/                           # 数据库脚本
-│   ├── schema.sql                 # 建表脚本 (6张表)
-│   └── seed.sql                   # 种子数据 (5个分类)
+├── sql/                           # Database scripts
+│   ├── schema.sql                 # Table creation
+│   └── seed.sql                   # Seed data
 │
-├── deploy/                        # 部署配置
+├── deploy/                        # Deployment config
 │   ├── nginx/
-│   │   └ campus-secondhand.conf   # Nginx 配置
+│   │   └── campus-secondhand.conf
 │   └── scripts/
-│       ├── backend-start.sh       # 后端启动脚本
-│       ├── frontend-build.sh      # 前端构建脚本
-│       └── init-rds.sh            # 数据库初始化脚本
+│       ├── backend-start.sh
+│       ├── frontend-build.sh
+│       └── init-rds.sh
 │
-├── docs/                          # 项目文档
-│   ├── deployment.md              # 部署说明
-│   ├── test-report.md             # 测试报告模板
-│   ├── huawei-cloud-deployment-tutorial.md  # 华为云配置教程
-│   └── screenshots/               # 系统截图目录
-│       └── README.md              # 截图清单
+├── docker-compose.yml             # Docker Compose
 │
-├── 课程大作业要求-虚拟化与云计算.md   # 课程报告 (已填写)
-├── 大作业要求.txt                  # 作业要求原文
-├── 大作业参考-虚拟云计算课程设计-代表作1_.md  # 参考案例
-│
-├── docker-compose.yml             # Docker Compose 配置
-│
-└── README.md                      # 本文件
+└── README.md                      # This file
 ```
 
 ---
 
-## 技术栈
+## Tech Stack
 
-### 后端
+### Backend
 
-| 技术 | 版本 | 说明 |
-|------|------|------|
-| Spring Boot | 3.2.5 | Java 企业级框架 |
-| MyBatis | 3.0.3 | ORM 框架 |
-| MySQL | 8.0 | 关系型数据库 |
-| JWT | jjwt 0.12.5 | 身份认证 |
-| 华为云 OBS SDK | 3.23.9 | 对象存储 |
+| Technology | Version | Description |
+|------------|---------|-------------|
+| Spring Boot | 3.2.5 | Java framework |
+| MyBatis | 3.0.3 | ORM framework |
+| MySQL | 8.0 | Database |
+| JWT | jjwt 0.12.5 | Authentication |
+| OBS SDK | 3.23.9 | Object storage |
 
-### 前端
+### Frontend
 
-| 技术 | 版本 | 说明 |
-|------|------|------|
-| Vue 3 | 3.4.x | 前端框架 |
-| Pinia | 2.x | 状态管理 |
-| Vue Router | 4.x | 路由管理 |
-| Element Plus | 2.6.x | UI 组件库 |
-| Vite | 5.x | 构建工具 |
+| Technology | Version | Description |
+|------------|---------|-------------|
+| Vue 3 | 3.4.x | Frontend framework |
+| Pinia | 2.x | State management |
+| Vue Router | 4.x | Routing |
+| Element Plus | 2.6.x | UI components |
+| Vite | 5.x | Build tool |
 
-### 云服务
+### Cloud Services
 
-| 服务 | 说明 |
-|------|------|
-| ECS | 弹性云服务器 (部署应用) |
-| RDS | 关系型数据库 MySQL |
-| OBS | 对象存储 (商品图片) |
+| Service | Description |
+|---------|-------------|
+| ECS | Cloud server |
+| RDS | MySQL database |
+| OBS | Object storage (images) |
 
 ---
 
-## 快速开始
+## Quick Start
 
-### 1. 本地开发环境
+### Prerequisites
 
-确保已安装：
 - JDK 21+
 - Maven 3.8+
 - Node.js 18+
 - MySQL 8.0+
 
-### 2. 后端启动
+### Backend Setup
 
 ```bash
 cd campus-secondhand-backend
 
-# 初始化数据库（自动读取 huawei-cloud.yml 配置）
-bash ../deploy/scripts/init-rds.sh
+# Create config file from template
+cp src/main/resources/huawei-cloud-example.yml src/main/resources/huawei-cloud.yml
+# Edit huawei-cloud.yml with your credentials
 
-# 或手动初始化
-mysql -uroot -proot -e "CREATE DATABASE campus_secondhand"
-mysql -uroot -proot campus_secondhand < ../sql/schema.sql
-mysql -uroot -proot campus_secondhand < ../sql/seed.sql
+# Initialize database
+mysql -uroot -p -e "CREATE DATABASE campus"
+mysql -uroot -p campus < ../sql/schema.sql
+mysql -uroot -p campus < ../sql/seed.sql
 
-# 编译运行
-mvn spring-boot:run
+# Build and run
+mvn clean package -DskipTests
+java -jar target/campus-secondhand-backend.jar
 ```
 
-后端运行在 http://localhost:8080
+Backend runs on http://localhost:8080
 
-### 3. 前端启动
+### Frontend Setup
 
 ```bash
 cd campus-secondhand-frontend
 
-# 安装依赖
+# Install dependencies
 npm install
 
-# 启动开发服务器
+# Development server
 npm run dev
+
+# Production build
+npm run build
 ```
 
-前端运行在 http://localhost:3000
+Frontend runs on http://localhost:3000
 
-### 4. Docker Compose 本地联调
+### Docker Compose
 
 ```bash
 docker-compose up -d
 ```
 
-访问 http://localhost
+Access at http://localhost
 
 ---
 
-## 华为云部署
+## Features
 
-详细部署教程请参阅：
-
-- **docs/huawei-cloud-deployment-tutorial.md** - 完整的华为云配置与项目编译教程
-
-核心步骤：
-1. 创建 ECS 实例 (2vCPU/4GB)
-2. 创建 RDS MySQL 8.0 实例
-3. 创建 OBS Bucket
-4. 配置安全组端口 (80, 8080, 3306)
-5. 上传代码并编译
-6. 配置 `huawei-cloud.yml` 华为云服务配置
-7. 配置 Nginx 反向代理
-8. 启动后端服务
+| Module | Features | Pages |
+|--------|----------|-------|
+| Auth | Register, Login | LoginView, RegisterView |
+| Product | Publish, Browse, Search | HomeView, PublishView, ProductDetailView |
+| Transaction | Create, Confirm, Complete, Cancel | TransactionsView |
+| Message | Send, Receive | MessagesView |
+| Review | Create, View | ReviewView, UserCenterView |
+| User | Profile, My Products | UserCenterView |
 
 ---
 
-## 功能清单
+## API Endpoints
 
-| 模块 | 功能 | 页面/接口 |
-|------|------|----------|
-| 认证 | 注册、登录 | LoginView, RegisterView |
-| 商品 | 发布、浏览、搜索 | HomeView, PublishView, ProductDetailView |
-| 交易 | 创建、确认、完成、取消 | TransactionsView |
-| 消息 | 发送、接收、对话 | MessagesView |
-| 评价 | 发起评价、查看评价 | ReviewView, UserCenterView |
-| 用户 | 个人信息、发布记录 | UserCenterView |
-
----
-
-## 截图要求
-
-课程报告需要系统截图，请按以下清单截图并放入 `docs/screenshots/` 目录：
-
-详见 `docs/screenshots/README.md`
-
-关键截图：
-- 首页商品列表
-- 登录/注册页面
-- 商品详情页
-- 发布商品页
-- 个人中心
-- 消息中心
-- 交易管理
-- 评价页面
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/auth/login` | POST | User login |
+| `/api/auth/register` | POST | User registration |
+| `/api/products` | GET | Product list |
+| `/api/products` | POST | Create product |
+| `/api/products/{id}` | GET | Product detail |
+| `/api/products/upload-url` | GET | Get OBS upload URL |
+| `/api/transactions` | POST | Create transaction |
+| `/api/messages` | GET/POST | Messages |
+| `/api/reviews` | POST | Create review |
 
 ---
 
-## 交付清单
+## Configuration
 
-课程提交需要以下内容：
+### huawei-cloud.yml Template
 
-1. **源码**：本目录所有源代码
-2. **报告**：课程大作业要求-虚拟化与云计算.md (已填写)
-3. **截图**：docs/screenshots/ 目录中的系统截图
-4. **华为云截图**：附录中的 ECS/RDS/OBS 截图
+```yaml
+huawei-cloud:
+  rds:
+    host: your-rds-host
+    port: 3306
+    database: campus
+    username: your-username
+    password: your-password
+  
+  obs:
+    access-key: your-access-key
+    secret-key: your-secret-key
+    endpoint: obs.region.myhuaweicloud.com
+    bucket: your-bucket-name
+```
 
 ---
 
-## 作者信息
+## Deployment
 
-- **姓名**: 李嘉辉
-- **学号**: 3123004443
-- **学院**: 计算机学院
-- **班级**: 软件工程卓越班
-- **指导教师**: 张静
-- **提交日期**: 2026年4月27日
+1. Set up cloud server (ECS)
+2. Create MySQL database (RDS)
+3. Create object storage bucket (OBS)
+4. Configure security groups (ports 80, 8080, 3306)
+5. Deploy backend with Maven
+6. Build frontend with Vite
+7. Configure Nginx reverse proxy
+8. Start services
 
 ---
 
-**最后更新**: 2026-04-23
+## License
 
-**更新内容：**
-- 新增华为云统一配置文件 `huawei-cloud.yml`
-- RDS 和 OBS 配置集中管理，简化部署流程
+MIT License
+
+---
+
+**Last Updated**: 2026-04-23
